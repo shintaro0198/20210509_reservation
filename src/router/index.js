@@ -1,6 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index'
 import Home from '../views/Home.vue'
+import Signup from '../views/Signup.vue'
+import Login from '../views/Login.vue'
+import Thanks from '../views/Thanks.vue'
+import Mypage from '../views/Mypage.vue'
+import Detail from '../views/Detail.vue'
+import Reserved from '../views/Reserved.vue'
 
 Vue.use(VueRouter)
 
@@ -8,15 +15,50 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requiresAuth:true
+    }
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/signup',
+    name: 'Signup',
+    component: Signup
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/thanks',
+    name: 'Thanks',
+    component: Thanks
+  },
+  {
+    path: '/mypage',
+    name: 'Mypage',
+    component: Mypage,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: '/detail/:restaurant_id',
+    name: 'Detail',
+    props: true,
+    component: Detail,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: '/reserved',
+    name: 'Reserved',
+    component: Reserved,
+    meta: {
+      requiresAuth:true
+    }
   }
 ]
 
@@ -24,6 +66,38 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth === true && store.state.auth !== true) {
+    next('/login');
+  } else {
+    next();
+  }
+})
+router.afterEach(() => {
+  const events = ['click', 'mousemove', 'mousedown', 'scroll', 'keypress', 'load']
+  const capturedAction = function () {
+    events.forEach(function (event) {
+      window.addEventListener(event, resetTimer)
+    })
+  }
+  const timeLimit = function () {
+    setTimeout(() => {
+      store.commit('auth',false)
+      router.go({path: router.currentRoute.path, force: true})
+    }, 3600*1000);
+  }
+  const resetTimer = function () {
+    new Promise((resolve) => {
+      clearTimeout(timeLimit)
+      resolve()
+    }).then(() => {
+      timeLimit()
+    })
+  }
+  capturedAction();
+  timeLimit();
 })
 
 export default router
