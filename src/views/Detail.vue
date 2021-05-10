@@ -7,7 +7,7 @@
       <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto">
         <RestaurantDetail :restaurantId="restaurant_id"></RestaurantDetail>
       </v-col>
-      <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto">
+      <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto mt-12 mb-10">
         <Reserve :restaurantId="restaurant_id"></Reserve>
       </v-col>
     </v-row>

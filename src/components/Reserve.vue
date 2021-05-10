@@ -9,8 +9,9 @@
           <v-text-field label="日程" v-model="date" @click="showDatePicker=!showDatePicker" readonly></v-text-field>
           <v-scroll-y-transition>
             <div v-show="showDatePicker==true">
-              <v-date-picker v-model="date" locale="jp-ja" :allowed-dates="allowedDates" :day-format="date => new Date(date).getDate()"></v-date-picker>
+              <v-date-picker v-model="date" locale="jp-ja" :allowed-dates="allowedDates" :day-format="date => new Date(date).getDate()" :min="today" :max="max"></v-date-picker>
               <v-btn @click="showDatePicker=!showDatePicker" text color="primary">決定</v-btn>
+              <p>{{today}}</p>
             </div>
           </v-scroll-y-transition>
         </template>
@@ -24,7 +25,7 @@
           </v-scroll-y-transition>
         </template>
         <template>
-          <v-select :items="numbers" label="人数" v-model="number"></v-select>
+          <v-select :items="numbers" label="人数" v-model="number" dense></v-select>
         </template>
         <template>
           <div class="font-weight-bold">
@@ -53,11 +54,31 @@ export default {
       date:"",
       time:"",
       number:"",
-      numbers:[1,2,3,4,5],
+      numbers:[1,2,3,4,5,6,7,8,9,10],
       showDatePicker:false,
       showTimePicker:false,
       allowedHours:[10,11,12,13,14,15,16,17,18,19,20],
-      showCalendarTitle: false
+      showCalendarTitle: false,
+    }
+  },
+  computed:{
+    today(){
+      const date = new Date;
+      const year = date.getFullYear()
+      const month = date.getMonth()+1
+      const editedMonth = ('0' +month ).slice(-2)
+      const day = date.getDate()
+      const today = year + '-' + editedMonth + '-' + day
+      return today
+    },
+    max(){
+      const date = new Date;
+      const year = date.getFullYear()
+      const month = date.getMonth()+1
+      const editedMonth = ('0' +month ).slice(-2)
+      const day = date.getDate()
+      const max = year+1 + '-' + editedMonth + '-' + day
+      return max
     }
   },
   props:['restaurantId'],
@@ -65,8 +86,11 @@ export default {
     allowedDates(){
       return [1,2,3,4,5]
     },
-    reserve(){
-      axios.post('https://thawing-sea-60162.herokuapp.com/api/reservation',{
+    async reserve(){
+      if(this.date==="" || this.time==="" || this.number===""){
+        alert('入力されていない項目があります')
+      } else{
+        await axios.post('https://thawing-sea-60162.herokuapp.com/api/reservation',{
         user_id : this.$store.state.user.id,
         restaurant_id : this.restaurantId,
         date : this.date,
@@ -76,6 +100,7 @@ export default {
       .then(()=>{
         this.$router.push('/reserved')
       })
+      }
     }
   },
 }
