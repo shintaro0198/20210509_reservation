@@ -72,12 +72,12 @@ export default {
       return today
     },
     max(){
-      const date = new Date;
-      const year = date.getFullYear()
-      const month = date.getMonth()+1
-      const editedMonth = ('0' +month ).slice(-2)
-      const day = date.getDate()
-      const max = year+1 + '-' + editedMonth + '-' + day
+      const maxDate = new Date;
+      const maxYear = maxDate.getFullYear()
+      const maxMonth = maxDate.getMonth()+1
+      const maxEditedMonth = ('0' + maxMonth ).slice(-2)
+      const maxday = maxDate.getDate()
+      const max = maxYear+1 + '-' + maxEditedMonth + '-' +  maxday
       return max
     }
   },

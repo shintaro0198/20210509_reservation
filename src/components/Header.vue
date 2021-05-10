@@ -2,13 +2,13 @@
   <div id="header">
     <v-toolbar flat class="blue white--text d-block d-xl-none d-md-none d-sm-none">
       <v-toolbar-title class="mx-auto text-h5">
-        Reserve
+        Rese
       </v-toolbar-title>
     </v-toolbar>
     <v-toolbar flat class="blue white--text">
       <v-layout justify-space-between class="mx-5">
         <v-toolbar-title class="text-h5 d-none d-xl-block d-md-block d-sm-block">
-          Reserve
+          Rese
         </v-toolbar-title>
         <v-toolbar-items class="mx-auto  mx-xl-0 mx-md-0 mx-sm-0">
           <slot></slot>
