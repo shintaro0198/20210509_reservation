@@ -9,8 +9,8 @@
           <v-card-text>
             <v-layout justify-space-between>
             <v-btn color="primary" @click="$router.push({name:'Detail',params:{restaurant_id:item.id}})">詳しく見る</v-btn>
-            <v-icon v-if="item.favorite=='available'" @click="like(item.id)" color="red">mdi-cards-heart</v-icon>
-            <v-icon v-else @click="like(item.id)">mdi-heart-outline</v-icon>
+            <v-icon v-if="item.favorite===true" @click="like(item.id);item.favorite=!item.favorite" color="red">mdi-cards-heart</v-icon>
+            <v-icon v-else @click="like(item.id,item.favorite);item.favorite=!item.favorite">mdi-heart-outline</v-icon>
             </v-layout>
           </v-card-text>
         </v-card>
@@ -27,7 +27,8 @@ export default {
       restaurantList : [],
       location : "",
       genre : "",
-      num:10
+      num:10,
+      heart : false
     }
   },
   props:['searchedLocation','searchedGenre','searchedText'],
@@ -67,9 +68,6 @@ export default {
     }
   },
   methods:{
-    aaaa(){
-      console.log(this.searchedLocation,this.searchedGenre,this.searchedText)
-    },
     async getRestaurantList(){
       await axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant')
       .then((response)=>{
@@ -120,10 +118,6 @@ export default {
       await axios.post('https://thawing-sea-60162.herokuapp.com/api/favorite',{
         user_id : this.$store.state.user.id,
         restaurant_id : restaurantId
-      })
-      .then(()=>{
-        this.restaurantList = []
-        this.getRestaurantList();
       })
     }
   },
