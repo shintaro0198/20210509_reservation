@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main class="grey lighten-3">
+    <v-main class="grey lighten-3 pb-10">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -22,32 +22,19 @@ export default {
 .v-application *{
   font-family: '游ゴシック';
 }
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
+.gothic-h5{
+  font-family: '游ゴシック';
+  font-size: 30px;
 }
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
+.gothic-h6{
+  font-family: '游ゴシック';
+  font-size: 20px;
 }
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
+.gothic-sub-1{
+  font-family: '游ゴシック';
+  font-size: 18px;
 }
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
-}
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
-}
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
-}
-.h1{
-  font-size: 3.3125rem;
-  font-family : '游ゴシック'
+p{
+  padding: 0;
 }
 </style>

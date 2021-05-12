@@ -1,53 +1,59 @@
 <template>
   <div id="reservation">
-    <p class="text-h6 font-weight-bold">
+    <p class="gothic-h6 font-weight-bold">
       予約状況
     </p>
     <v-card color="blue white--text" v-for="(item,index) in list" class="mb-10" :key="item.reservationId">
-      <v-card-title class="mb-3">
-        <v-icon class="mr-5 white--text">mdi-clock-time-four-outline
-        </v-icon>
-        <v-col>予約{{index+1}}</v-col>
-        <v-col class="text-right"><v-icon color="white">mdi-information-outline</v-icon></v-col>
-      </v-card-title>
-      <v-card-text class="font-weight-bold white--text">
-        <v-row>
-          <v-col class="mr-3">レストラン</v-col>
-          <v-col>{{item.name}}</v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-text class="font-weight-bold white--text">
-        <v-row>
-          <v-col class="mr-3">日程</v-col>
-          <v-col>{{item.date}}</v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-text class="font-weight-bold white--text">
-        <v-row>
-          <v-col class="mr-3">時刻</v-col>
-          <v-col>{{item.time}}</v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-text class="font-weight-bold white--text">
-        <v-row>
-          <v-col class="mr-3">人数</v-col>
-          <v-col>{{item.number}}</v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-text>
-        <v-btn v-if="showVerification===false" @click="showVerification=true" class="d-block ml-auto">予約キャンセル</v-btn>
-        <v-card v-if="showVerification===true">
-          <v-card-title>
-            本当に予約をキャンセルしますか
-          </v-card-title>
-          <v-card-text>
-            <v-layout justify-space-between>
-            <v-btn @click="deleteReservation(item.reservationId)">はい</v-btn>
-            <v-btn @click="showVerification=false">いいえ</v-btn>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-card-text>
+      <template>
+        <v-card-title class="mb-3">
+          <v-icon class="mr-5 white--text">mdi-clock-time-four-outline
+          </v-icon>
+          <v-col>予約{{index+1}}</v-col>
+          <v-col class="text-right"><v-icon color="white">mdi-information-outline</v-icon></v-col>
+        </v-card-title>
+      </template>
+      <template>
+        <v-card-text class="font-weight-bold white--text">
+          <v-row>
+            <v-col class="mr-3">レストラン</v-col>
+            <v-col>{{item.name}}</v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-text class="font-weight-bold white--text">
+          <v-row>
+            <v-col class="mr-3">日程</v-col>
+            <v-col>{{item.date}}</v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-text class="font-weight-bold white--text">
+          <v-row>
+            <v-col class="mr-3">時刻</v-col>
+            <v-col>{{item.time}}</v-col>
+          </v-row>
+        </v-card-text>
+        <v-card-text class="font-weight-bold white--text">
+          <v-row>
+            <v-col class="mr-3">人数</v-col>
+            <v-col>{{item.number}}</v-col>
+          </v-row>
+        </v-card-text>
+      </template>
+      <template>
+        <v-card-text>
+          <v-btn v-if="item.showVerification===false" @click="item.showVerification=true" class="d-block ml-auto">予約キャンセル</v-btn>
+          <v-card v-if="item.showVerification===true">
+            <v-card-title>
+              本当に予約をキャンセルしますか
+            </v-card-title>
+            <v-card-text>
+              <v-layout justify-space-between>
+              <v-btn @click="deleteReservation(item.id)">はい</v-btn>
+              <v-btn @click="item.showVerification=false">いいえ</v-btn>
+              </v-layout>
+            </v-card-text>
+          </v-card>
+        </v-card-text>
+      </template>
     </v-card>
   </div>
 </template>
@@ -66,20 +72,21 @@ export default {
       await axios.get('https://thawing-sea-60162.herokuapp.com/api/reservesort/' + this.$store.state.user.id)
       .then((response)=>{
         Promise.all(response.data.data.map((item)=>{
-          let reservationId = item.id
-          let reservationDate = item.date;
-          let reservationTime = item.time;
-          let reservationNumber = item.number;
+          const reservationId = item.id
+          const reservationDate = item.date;
+          const reservationTime = item.time;
+          const reservationNumber = item.number;
           return new Promise((resolve)=>{
             axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + item.restaurant_id)
             .then((response)=>{
-              let reservationName = response.data.data.name
-              let restaurant = {
-                reservationId : reservationId,
+              const reservationName = response.data.data.name
+              const restaurant = {
+                id : reservationId,
                 name : reservationName,
                 date : reservationDate,
                 time : reservationTime,
-                number : reservationNumber
+                number : reservationNumber,
+                showVerification : false
               };
               this.list.push(restaurant)
               resolve()
