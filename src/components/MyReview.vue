@@ -7,7 +7,7 @@
       <v-layout justify-space-between>
         <div class="d-flex">
           <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
-          <p class="mt-1">{{item.comment}}</p>
+          <p class="mb-3">{{item.comment}}</p>
         </div>
         <div>
           <v-icon @click="item.showEdit=!item.showEdit" class="mr-3">mdi-pencil</v-icon>
