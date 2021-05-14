@@ -12,7 +12,7 @@
         </v-toolbar-title>
         <v-toolbar-items class="white--text">
           <v-btn text color="white"  class="text-subtitle-1 font-weight-bold" @click="$router.push('/login')">ログイン</v-btn>
-          <v-btn text color="white"  class="text-subtitle-1 font-weight-bold" @click="$router.push('/signup')">サインアップ</v-btn>
+          <v-btn text color="white"  class="text-subtitle-1 font-weight-bold" @click="$router.push('/register')">サインアップ</v-btn>
         </v-toolbar-items>
       </v-layout>
     </v-toolbar>

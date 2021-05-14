@@ -1,6 +1,7 @@
 <template>
   <div id="favorites">
     <p class="font-weight-bold gothic-h6">お気に入り店舗</p>
+    <p v-if="restaurantList.length===0">お気に入り情報はありません</p>
     <v-row class="mx-auto">
       <v-col class="mx-auto" v-for="item in restaurantList" :key="item.id">
         <v-card width="230px">

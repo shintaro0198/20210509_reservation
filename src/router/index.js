@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '../store/index'
 import Home from '../views/Home.vue'
-import Signup from '../views/Signup.vue'
+import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Thanks from '../views/Thanks.vue'
 import Mypage from '../views/Mypage.vue'
@@ -21,9 +21,9 @@ const routes = [
     }
   },
   {
-    path: '/signup',
-    name: 'Signup',
-    component: Signup
+    path: '/register',
+    name: 'Register',
+    component: Register
   },
   {
     path: '/login',

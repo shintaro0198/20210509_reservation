@@ -1,6 +1,7 @@
 <template>
   <div id="review">
     <p class="font-weight-bold gothic-h6">レビュー</p>
+    <p v-if="reviewList.length===0">あなたの投稿したレビューはありません</p>
     <div v-for="item in reviewList" :key="item.id">
       <div class="font-weight-bold"><span class="mr-3">{{item.userName}}</span><span>{{item.restaurantName}}</span></div>
       <v-layout justify-space-between>

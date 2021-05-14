@@ -14,12 +14,10 @@
         <v-col cols="10" xl="6"  md="6" class="ml-xl-auto ml-md-auto mx-auto  mx-xl-0 mx-md-0">
           <Favorites></Favorites>
         </v-col>
-      </v-row>
-      <div>
         <v-col cols="10" xl="5" md="5" class="mr-xl-auto mr-md-auto mx-auto mx-xl-0 mx-md-0">
           <MyReview></MyReview>
         </v-col>
-      </div>
+      </v-row>
     </div>
   </div>
 </template>

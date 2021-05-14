@@ -3,7 +3,8 @@
     <p class="gothic-h6 font-weight-bold">
       予約状況
     </p>
-    <v-card color="blue white--text" v-for="(item,index) in list" class="mb-10" :key="item.reservationId">
+    <p v-if="reservationList.length===0">予約情報はありません</p>
+    <v-card color="blue white--text" v-for="(item,index) in reservationList" class="mb-10" :key="item.reservationId">
       <template>
         <v-card-title class="mb-3">
           <v-icon class="mr-5 white--text">mdi-clock-time-four-outline
@@ -63,7 +64,7 @@ import axios from 'axios'
 export default {
   data(){
     return{
-      list : [],
+      reservationList : [],
       showVerification : false
     }
   },
@@ -93,7 +94,7 @@ export default {
             })
           })
         })).then(()=>{
-        this.list.sort((a,b)=>{
+        this.reservationList.sort((a,b)=>{
           return a.reservationId - b.reservationId
         })
       })
