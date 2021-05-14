@@ -57,7 +57,6 @@ export default {
       numbers:[1,2,3,4,5,6,7,8,9,10],
       showDatePicker:false,
       showTimePicker:false,
-      allowedHours:[10,11,12,13,14,15,16,17,18,19,20,21,22],
       showCalendarTitle: false,
     }
   },
@@ -72,13 +71,25 @@ export default {
       return today
     },
     max(){
-      const maxDate = new Date;
-      const maxYear = maxDate.getFullYear()
-      const maxMonth = maxDate.getMonth()+1
-      const maxEditedMonth = ('0' + maxMonth ).slice(-2)
-      const maxday = maxDate.getDate()
-      const max = maxYear+1 + '-' + maxEditedMonth + '-' +  maxday
+      const date = new Date;
+      const year = date.getFullYear()
+      const month = date.getMonth()+1
+      const editedMonth = ('0' + month ).slice(-2)
+      const day = date.getDate()
+      const max = year+1 + '-' + editedMonth + '-' +  day
       return max
+    },
+    allowedHours(){
+      const allowedHoursList = [10,11,12,13,14,15,16,17,18,19,20,21,22];
+      const date = new Date;
+      const time = date.getHours();
+      const limitedHoursList = allowedHoursList.slice(time-9)
+      console.log(limitedHoursList)
+      if(this.date===this.today){
+        return limitedHoursList
+      } else{
+        return allowedHoursList
+      }
     }
   },
   props:['restaurantId'],
