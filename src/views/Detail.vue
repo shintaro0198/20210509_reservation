@@ -14,7 +14,7 @@
           <v-btn @click="showReview=!showReview" small text>レビューを閉じる</v-btn>
         </Review>
       </v-col>
-      <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto mt-13 mb-10">
+      <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto mt-11 mb-10">
         <Reserve :restaurantId="restaurant_id">
           <div>予約する</div>
         </Reserve>
