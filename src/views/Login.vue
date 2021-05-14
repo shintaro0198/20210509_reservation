@@ -8,7 +8,7 @@
         </v-card-title>
         <v-card-text>
           <v-form>
-            <v-text-field type="email" label="email" prepend-icon="mdi-email" v-model="email"></v-text-field>
+            <v-text-field type="email" label="email" prepend-icon="mdi-email" v-model="email" :rules="emailRules"></v-text-field>
             <v-text-field :type="show? 'password':'text' " label="パスワード" 
             :append-icon="show? 'mdi-eye':'mdi-eye-off'" 
             @click:append="show = !show" prepend-icon="mdi-lock" v-model="password"></v-text-field>
@@ -28,6 +28,10 @@ export default {
       show : true,
       email : "",
       password : "",
+      emailRules:[
+          v => !!v || '',
+          v => /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9-]+)*$/.test(v) || '有効なメールアドレスを入力してください'
+      ],
     }
   },
   components:{
