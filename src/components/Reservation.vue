@@ -10,32 +10,43 @@
           <v-icon class="mr-5 white--text">mdi-clock-time-four-outline
           </v-icon>
           <v-col>予約{{index+1}}</v-col>
-          <v-col class="text-right"><v-icon color="white">mdi-information-outline</v-icon></v-col>
         </v-card-title>
       </template>
       <template>
         <v-card-text class="font-weight-bold white--text">
           <v-row>
             <v-col class="mr-3">レストラン</v-col>
-            <v-col>{{item.name}}</v-col>
+            <v-col>
+              <div>{{item.name}}</div>
+              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-text class="font-weight-bold white--text">
           <v-row>
             <v-col class="mr-3">日程</v-col>
-            <v-col>{{item.date}}</v-col>
+            <v-col>
+              <div>{{item.date}}</div>
+              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-text class="font-weight-bold white--text">
           <v-row>
             <v-col class="mr-3">時刻</v-col>
-            <v-col>{{item.time}}</v-col>
+            <v-col>
+              <div>{{item.time}}</div>
+              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
+            </v-col>
           </v-row>
         </v-card-text>
         <v-card-text class="font-weight-bold white--text">
           <v-row>
             <v-col class="mr-3">人数</v-col>
-            <v-col>{{item.number}}</v-col>
+            <v-col>
+              <div>{{item.number}}</div>
+              <div v-if="item.showEdit===true"><v-text-field den></v-text-field></div>
+            </v-col>
           </v-row>
         </v-card-text>
       </template>
@@ -87,9 +98,10 @@ export default {
                 date : reservationDate,
                 time : reservationTime,
                 number : reservationNumber,
-                showVerification : false
+                showEdit : false,
+                showVerification : false,
               };
-              this.list.push(restaurant)
+              this.reservationList.push(restaurant)
               resolve()
             })
           })
@@ -107,7 +119,7 @@ export default {
         alert('予約をキャンセルしました')
       }).then(()=>{
         console.log('reload')
-        this.list = []
+        this.reservationList = []
         this.getReservation();
       })
     }

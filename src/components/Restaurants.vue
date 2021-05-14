@@ -2,7 +2,7 @@
   <div id="restaurant">
     <v-row class="mx-auto">
       <v-col class="mx-auto" v-for="item in list" :key="item.id">
-        <v-card width="230px">
+        <v-card width="200px">
           <v-img :src="item.img"></v-img>
           <v-card-title>{{item.name}}</v-card-title>
           <v-card-text>

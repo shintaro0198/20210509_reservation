@@ -25,7 +25,7 @@
           </v-scroll-y-transition>
         </template>
         <template>
-          <v-select :items="numbers" label="人数" v-model="number" dense></v-select>
+          <v-select :items="numbers" label="人数" v-model="number" dense class="mt-5"></v-select>
         </template>
         <template>
           <div class="font-weight-bold">
@@ -40,7 +40,7 @@
           </div>
         </template>
       </v-card-text>
-      <template><v-btn color="primary" tile class="d-block text-center" width="100%" @click="reserve">予約する</v-btn></template>
+      <template><v-btn color="primary" tile class="d-block text-center" width="100%" @click="reserve"><slot></slot></v-btn></template>
     </v-card>
   </div>
 </template>
@@ -57,7 +57,7 @@ export default {
       numbers:[1,2,3,4,5,6,7,8,9,10],
       showDatePicker:false,
       showTimePicker:false,
-      allowedHours:[10,11,12,13,14,15,16,17,18,19,20],
+      allowedHours:[10,11,12,13,14,15,16,17,18,19,20,21,22],
       showCalendarTitle: false,
     }
   },

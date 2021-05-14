@@ -10,12 +10,14 @@
         </RestaurantDetail>
       </v-col>
       <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto" v-if="showReview===true">
-        <Evaluation :restaurantId="restaurant_id">
+        <Review :restaurantId="restaurant_id">
           <v-btn @click="showReview=!showReview" small text>レビューを閉じる</v-btn>
-        </Evaluation>
+        </Review>
       </v-col>
       <v-col cols="10" xl="5" md="5" sm="8" class="mx-auto mt-13 mb-10">
-        <Reserve :restaurantId="restaurant_id"></Reserve>
+        <Reserve :restaurantId="restaurant_id">
+          <div>予約する</div>
+        </Reserve>
       </v-col>
     </v-row>
     
@@ -25,7 +27,7 @@
 <script>
 import Header from '../components/Header'
 import RestaurantDetail from '../components/RestaurantDetail'
-import Evaluation from '../components/Evaluation'
+import Review from '../components/Review'
 import Reserve from '../components/Reserve'
 export default {
   data(){
@@ -35,7 +37,7 @@ export default {
   },
   props:['restaurant_id'],
   components:{
-    Header,RestaurantDetail,Evaluation,Reserve
+    Header,RestaurantDetail,Review,Reserve
   }
 }
 </script>

@@ -4,7 +4,7 @@
     <p v-if="restaurantList.length===0">お気に入り情報はありません</p>
     <v-row class="mx-auto">
       <v-col class="mx-auto" v-for="item in restaurantList" :key="item.id">
-        <v-card width="230px">
+        <v-card width="200px">
           <v-img :src="item.img"></v-img>
           <v-card-title>{{item.name}}</v-card-title>
           <v-card-text>
@@ -94,7 +94,7 @@ export default {
           })
         })).then(()=>{
           this.restaurantList.sort((a,b)=>{
-            return a.id<b.id
+            return a.id - b.id
           })
         })
       })

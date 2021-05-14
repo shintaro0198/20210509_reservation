@@ -9,8 +9,16 @@
           <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
           <p class="mt-1">{{item.comment}}</p>
         </div>
-        <v-icon @click="item.showVerification=!item.showVerifycation">mdi-delete</v-icon>
+        <div>
+          <v-icon @click="item.showEdit=!item.showEdit" class="mr-3">mdi-pencil</v-icon>
+          <v-icon @click="item.showVerification=!item.showVerification">mdi-delete</v-icon>
+        </div>
       </v-layout>
+      <div v-if="item.showEdit===true">
+        <v-rating v-model="rating" dense half-increments half-icon="mdi-star-half-full"  color="amber darken-1" class="body-2"></v-rating>
+        <v-textarea solo dense auto-grow v-model="comment"></v-textarea>
+        <v-btn @click="editReview(item.id)">レビューを編集する</v-btn>
+      </div>
       <v-card v-if="item.showVerification===true">
           <v-card-text>
             <p>レビューを削除しますか</p>
@@ -30,7 +38,8 @@ export default {
   data(){
     return{
       reviewList:[],
-      showVerification : false
+      rating : 4,
+      comment : ""
     }
   },
   methods:{
@@ -60,7 +69,8 @@ export default {
                   restaurantName : values[1],
                   rating : parseInt(item.rating.toLocaleString()),
                   comment : item.content,
-                  showVerification : false
+                  showEdit : false,
+                  showVerification : false,
                 }
                 this.reviewList.push(data)
                 resolve()
@@ -71,6 +81,16 @@ export default {
             return a.id-b.id
           })
         })
+      })
+    },
+    async editReview(reviewId){
+      await axios.put('https://thawing-sea-60162.herokuapp.com/api/evaluation/' + reviewId,{
+        rating : this.rating,
+        content : this.comment
+      })
+      .then(()=>{
+        this.reviewList = []
+        this.getMyReviews()
       })
     },
     async deleteReview(reviewId){
