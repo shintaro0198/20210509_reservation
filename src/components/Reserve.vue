@@ -82,7 +82,7 @@ export default {
     allowedHours(){
       const allowedHoursList = [10,11,12,13,14,15,16,17,18,19,20,21,22];
       const date = new Date;
-      const time = date.getHours();
+      const time = parseInt(date.getHours());
       const limitedHoursList = allowedHoursList.slice(time-9)
       console.log(limitedHoursList)
       if(this.date===this.today){
