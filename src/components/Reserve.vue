@@ -29,7 +29,7 @@
         </template>
         <template>
           <div class="font-weight-bold">
-            <v-row><v-col>レストラン</v-col><v-col>レストラン</v-col></v-row>
+            <v-row><v-col>レストラン</v-col><v-col>{{restaurantName}}</v-col></v-row>
             <v-divider></v-divider>
             <v-row><v-col>日程</v-col><v-col>{{date}}</v-col></v-row>
             <v-divider></v-divider>
@@ -51,6 +51,7 @@ export default {
   data(){
     return{
       show: false,
+      restaurantName : "",
       date:"",
       time:"",
       number:"",
@@ -84,7 +85,6 @@ export default {
       const date = new Date;
       const time = parseInt(date.getHours());
       const limitedHoursList = allowedHoursList.slice(time-9)
-      console.log(limitedHoursList)
       if(this.date===this.today){
         return limitedHoursList
       } else{
@@ -92,28 +92,65 @@ export default {
       }
     }
   },
-  props:['restaurantId'],
+  props:['restaurantId','reservationId','postMethod','putMethod'],
   methods:{
     allowedDates(){
       return [1,2,3,4,5]
     },
-    async reserve(){
-      if(this.date==="" || this.time==="" || this.number===""){
-        alert('入力されていない項目があります')
-      } else{
-        await axios.post('https://thawing-sea-60162.herokuapp.com/api/reservation',{
-        user_id : this.$store.state.user.id,
-        restaurant_id : this.restaurantId,
-        date : this.date,
-        time : this.time,
-        number : this.number
-      })
-      .then(()=>{
-        this.$router.push('/reserved')
-      })
+    async getRestaurantName(){
+      if(this.postMethod=="post"){
+        await axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + this.restaurantId)
+        .then((response)=>{
+          this.restaurantName = response.data.data.name
+        })
+      } else if(this.putMethod=="put"){
+        await axios.get('https://thawing-sea-60162.herokuapp.com/api/reservation/' + this.reservationId)
+        .then((response)=>{
+          axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + response.data.data.restaurant_id)
+          .then((response)=>{
+            this.restaurantName = response.data.data.name
+          })
+        })
       }
+    },
+    async reserve(){
+      if(this.postMethod=="post"){
+        if(this.date==="" || this.time==="" || this.number===""){
+          alert('入力されていない項目があります')
+        } else{
+          await axios.post('https://thawing-sea-60162.herokuapp.com/api/reservation',{
+          user_id : this.$store.state.user.id,
+          restaurant_id : this.restaurantId,
+          date : this.date,
+          time : this.time,
+          number : this.number
+        })
+        .then(()=>{
+          this.$router.push('/reserved')
+        })
+        }
+      } else if(this.putMethod=="put"){
+        if(this.date==="" || this.time==="" || this.number===""){
+          alert('入力されていない項目があります')
+        } else{
+          await axios.put('https://thawing-sea-60162.herokuapp.com/api/reservation/'+this.reservationId,{
+          user_id : this.$store.state.user.id,
+          restaurant_id : this.restaurantId,
+          date : this.date,
+          time : this.time,
+          number : this.number
+        })
+        .then(()=>{
+          this.$router.push('/reserved')
+        })
+        }
+      }
+      
     }
   },
+  async created(){
+    this.getRestaurantName()
+  }
 }
 </script>
 

@@ -74,6 +74,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next();
   }
+  const sitePege = ["Register","Login","Thanks","Home","Mypage","Reserved"]
+  if (sitePege.indexOf(to.name) === -1) {
+    console.log('alpha')
+  }
 })
 router.afterEach(() => {
   const events = ['click', 'mousemove', 'mousedown', 'scroll', 'keypress', 'load']

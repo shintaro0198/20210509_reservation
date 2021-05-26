@@ -18,7 +18,6 @@
             <v-col class="mr-3">レストラン</v-col>
             <v-col>
               <div>{{item.name}}</div>
-              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
             </v-col>
           </v-row>
         </v-card-text>
@@ -27,7 +26,6 @@
             <v-col class="mr-3">日程</v-col>
             <v-col>
               <div>{{item.date}}</div>
-              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
             </v-col>
           </v-row>
         </v-card-text>
@@ -36,7 +34,6 @@
             <v-col class="mr-3">時刻</v-col>
             <v-col>
               <div>{{item.time}}</div>
-              <div v-if="item.showEdit===true"><v-text-field dense></v-text-field></div>
             </v-col>
           </v-row>
         </v-card-text>
@@ -45,25 +42,27 @@
             <v-col class="mr-3">人数</v-col>
             <v-col>
               <div>{{item.number}}</div>
-              <div v-if="item.showEdit===true"><v-text-field den></v-text-field></div>
             </v-col>
           </v-row>
         </v-card-text>
       </template>
       <template>
         <v-card-text>
-          <v-btn v-if="item.showVerification===false" @click="item.showVerification=true" class="d-block ml-auto">予約キャンセル</v-btn>
-          <v-card v-if="item.showVerification===true">
-            <v-card-title>
-              本当に予約をキャンセルしますか
-            </v-card-title>
-            <v-card-text>
-              <v-layout justify-space-between>
-              <v-btn @click="deleteReservation(item.id)">はい</v-btn>
-              <v-btn @click="item.showVerification=false">いいえ</v-btn>
+          <v-layout>
+            <v-btn @click="sendEditData(item.id)">予約情報を変更する</v-btn>
+            <v-btn v-if="item.showCancel===false" @click="item.showCancel=true" class="ml-auto">予約キャンセル</v-btn>
+            <v-card v-if="item.showCancel===true">
+              <v-card-title>
+                本当に予約をキャンセルしますか
+              </v-card-title>
+              <v-card-text>
+                <v-layout justify-space-between>
+                <v-btn @click="deleteReservation(item.id)">はい</v-btn>
+                <v-btn @click="item.showCancel=false">いいえ</v-btn>
               </v-layout>
             </v-card-text>
           </v-card>
+          </v-layout>
         </v-card-text>
       </template>
     </v-card>
@@ -76,7 +75,7 @@ export default {
   data(){
     return{
       reservationList : [],
-      showVerification : false
+      showEdit : "",
     }
   },
   methods:{
@@ -98,8 +97,7 @@ export default {
                 date : reservationDate,
                 time : reservationTime,
                 number : reservationNumber,
-                showEdit : false,
-                showVerification : false,
+                showCancel : false,
               };
               this.reservationList.push(restaurant)
               resolve()
@@ -111,6 +109,16 @@ export default {
         })
       })
       })
+    },
+    async sendEditData(reservationId){
+      new Promise((resolve)=>{
+        this.showEdit = !this.showEdit
+        resolve()
+      })
+      .then(()=>{
+        this.$emit("getEditData",this.showEdit,reservationId)
+      })
+      
     },
     async deleteReservation(reservation_id){
       console.log(reservation_id)
