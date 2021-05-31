@@ -39,57 +39,8 @@ export default {
           return new Promise((resolve)=>{
             axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + item.restaurant_id)
             .then((response)=>{
-              const name = response.data.data.name;
-              const img = response.data.data.img;
-              const getReview = new Promise((resolve)=>{
-              axios.get('https://thawing-sea-60162.herokuapp.com/api/evaluationsort/' + response.data.data.id)
-              .then((response)=>{
-                if(response.data.data.length>=1){
-                  const reviewList = [];
-                  Promise.all(response.data.data.map((item)=>{
-                    return new Promise((resolve)=>{
-                      reviewList.push(parseInt(item.rating))
-                      resolve()
-                    })
-                  })).then(()=>{
-                    const sum = reviewList.reduce((sum,element)=>{
-                      return sum+element
-                    })
-                    const average = sum/response.data.data.length
-                    resolve(average)
-                  })
-                } else{
-                  const average = 0;
-                  resolve(average)
-                }
-              })
-            })
-              const getLocationName = new Promise((resolve)=>{
-                axios.get('https://thawing-sea-60162.herokuapp.com/api/location/' + response.data.data.location_id)
-                .then((response)=>{
-                  let location = response.data.data.name
-                  resolve(location)
-                })
-              })
-              const getGenreName = new Promise((resolve)=>{
-                axios.get('https://thawing-sea-60162.herokuapp.com/api/genre/' + response.data.data.genre_id)
-                .then((response)=>{
-                  let genre = response.data.data.name
-                  resolve(genre)
-                })
-              })
-              Promise.all([getReview,getLocationName,getGenreName]).then((values)=>{
-                const restaurant = {
-                  id : item.restaurant_id,
-                  name : name,
-                  rating : values[0],
-                  location : values[1],
-                  genre : values[2],
-                  img : img
-                }
-                this.restaurantList.push(restaurant)
-                resolve()
-              })
+              this.restaurantList.push(response.data.data);
+              resolve()
             })
           })
         })).then(()=>{

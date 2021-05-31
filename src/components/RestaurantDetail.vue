@@ -14,10 +14,10 @@
         <p class="mt-5 font-weight-bold">{{restaurant.detail}}</p>
       </v-col>
       <v-col cols="10" xl="5" md="5" class="mx-auto">
-        <div v-if="courseMenu.title!==null">
+        <div v-if="restaurant.course_menu!=undefined">
           <p class="gothic-h6 font-weight-bold">おすすめコースメニュー</p>
-          <p>{{courseMenu.title}}</p>
-          <p style="white-space: pre-wrap;">{{courseMenu.detail}}</p>
+          <p>{{restaurant.course_menu.title}}</p>
+          <p style="white-space: pre-wrap;">{{restaurant.course_menu.detail}}</p>
         </div>
       </v-col>
     </v-row>
@@ -31,8 +31,7 @@ export default {
   data(){
     return{
       restaurant:{},
-      courseMenu:"",
-      reviewLength:""
+      reviewLength:0
     }
   },
   props:['restaurantId'],
@@ -40,64 +39,9 @@ export default {
     async getRestaurantDetail(){
       await axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + this.restaurantId)
       .then((response)=>{
-        /**______________________courseMenu_________________________________ */
-        axios.get('https://thawing-sea-60162.herokuapp.com/api/coursemenu/' + this.restaurantId)
-          .then((response)=>{
-            const courseMenu = {
-              title : response.data.data.title,
-              detail : response.data.data.detail
-            }
-            this.courseMenu = courseMenu
-        })
-        const getReview = new Promise((resolve)=>{
-          axios.get('https://thawing-sea-60162.herokuapp.com/api/evaluationsort/' + this.restaurantId)
-          .then((response)=>{
-            this.reviewLength = response.data.data.length
-            if(response.data.data.length>0){
-              const ReviewList = []
-              Promise.all((response.data.data.map((item)=>{
-                return new Promise((resolve)=>{
-                  ReviewList.push(parseInt(item.rating))
-                  resolve()
-                })
-              }))).then(()=>{
-                const sum = ReviewList.reduce((sum,element)=>{
-                  return sum + element
-                })
-                const average = sum/response.data.data.length
-                resolve(average)
-              })
-            } else{
-              const rating = 0
-              resolve(rating)
-            }
-          })
-        })
-        const getLocationName = new Promise((resolve)=>{
-          axios.get('https://thawing-sea-60162.herokuapp.com/api/location/' + response.data.data.location_id)
-          .then((response)=>{
-            const location = response.data.data.name
-            resolve(location)
-          })
-        })
-        const getGenreName = new Promise((resolve)=>{
-          axios.get('https://thawing-sea-60162.herokuapp.com/api/genre/' + response.data.data.genre_id)
-          .then((response)=>{
-            const genre = response.data.data.name
-            resolve(genre)
-          })
-        })
-        Promise.all([getReview,getLocationName,getGenreName]).then((values)=>{
-          this.restaurant = {
-            id : response.data.data.id,
-            name : response.data.data.name,
-            rating : values[0],
-            location : values[1],
-            genre : values[2],
-            detail : response.data.data.detail,
-            img : response.data.data.img
-          }
-        })
+       this.restaurant = response.data.data
+       this.reviewLength = response.data.data.review.length
+       console.log(this.restaurant)
       })
     },
   },

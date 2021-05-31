@@ -3,11 +3,11 @@
     <p class="font-weight-bold gothic-h6">レビュー</p>
     <p v-if="reviewList.length===0">あなたの投稿したレビューはありません</p>
     <div v-for="item in reviewList" :key="item.id">
-      <div class="font-weight-bold"><span class="mr-3">{{item.userName}}</span><span>{{item.restaurantName}}</span></div>
+      <div class="font-weight-bold"><span class="mr-3">{{item.user_name}}</span><span>{{item.restaurant_name}}</span></div>
       <v-layout justify-space-between>
         <div class="d-flex">
           <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
-          <p class="mb-3">{{item.comment}}</p>
+          <p class="mb-3">{{item.content}}</p>
         </div>
         <div>
           <v-icon @click="item.showEdit=!item.showEdit" class="mr-3">mdi-pencil</v-icon>
@@ -48,34 +48,10 @@ export default {
       .then((response)=>{
         Promise.all(response.data.data.map((item)=>{
           return new Promise((resolve)=>{
-              const getUserName = new Promise((resolve)=>{
-                axios.get('https://thawing-sea-60162.herokuapp.com/api/user/' + item.user_id)
-                .then((response)=>{
-                  const userName = response.data.data.name
-                  resolve(userName)
-                })
-              })
-              const getRestaurantName = new Promise((resolve)=>{
-                axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + item.restaurant_id)
-                .then((response)=>{
-                  const restaurantName = response.data.data.name
-                  resolve(restaurantName)
-                })
-              })
-              Promise.all([getUserName,getRestaurantName]).then((values)=>{
-                const data ={
-                  id : item.id,
-                  userName : values[0],
-                  restaurantName : values[1],
-                  rating : parseInt(item.rating.toLocaleString()),
-                  comment : item.content,
-                  showEdit : false,
-                  showVerification : false,
-                }
-                this.reviewList.push(data)
-                resolve()
-              })
-            })
+              item.rating = parseInt(item.rating);
+             this.reviewList.push(item)
+             resolve()
+          })
         })).then(()=>{
           this.reviewList.sort((a,b)=>{
             return a.id-b.id

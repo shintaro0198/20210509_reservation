@@ -28,8 +28,6 @@ export default {
   data(){
     return{
       restaurantList : [],
-      location : "",
-      genre : "",
       num:10,
       heart : false
     }
@@ -37,97 +35,73 @@ export default {
   props:['searchedLocation','searchedGenre','searchedText'],
   computed:{
     list(){
-      const searchedList = [];
+      let searchedList = [];
       if(this.searchedText!==""){
         for (let item of this.restaurantList){
-          if(item.name.indexOf(this.searchedText)!== -1){
+          if(item.name.indexOf(this.searchedText)!== -1 ||item.kana_name.indexOf(this.searchedText)!== -1){
             searchedList.push(item)
-          }
-        }
-      } else if(this.searchedLocation==='All area' && this.searchedGenre==='All genre'){
-        for(let item of this.restaurantList){
-          searchedList.push(item)
-        }
-      }  else if(this.searchedLocation!=='All area' && this.searchedGenre==='All genre'){
-        for(let item of this.restaurantList){
-          if(item.location.indexOf(this.searchedLocation)!== -1){
-            searchedList.push(item)
-          }
-        }
-      } else if(this.searchedLocation==='All area' && this.searchedGenre!=='All genre'){
-        for(let item of this.restaurantList){
-          if(item.genre.indexOf(this.searchedGenre)!== -1){
-            searchedList.push(item)
-          }
+          } 
         }
       } else{
-        for(let item of this.restaurantList){
-          if(item.location.indexOf(this.searchedLocation)!== -1 && item.genre.indexOf(this.searchedGenre)!== -1){
-            searchedList.push(item)
-          }
-        }
+        searchedList = this.restaurantList
       }
       return searchedList
+    },
+    searchItems(){
+      return [this.searchedLocation,this.searchedGenre]
+    },
+    location(){
+      let location = 'All area';
+      if(this.searchedLocation!==""){
+        location = this.searchedLocation
+      }
+      return location
+    },
+    genre(){
+      let genre = 'All genre';
+      if(this.searchedGenre!==""){
+        genre = this.searchedGenre
+      }
+      return genre
+    }
+  },
+  watch:{
+    searchItems : async function(){
+      await axios.get(`https://thawing-sea-60162.herokuapp.com/api/search?location=${this.location}&genre=${this.genre}`)
+      .then((response)=>{
+        console.log(response)
+        this.getFavorites(response.data.data)
+      })
     }
   },
   methods:{
     async getRestaurantList(){
       await axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant')
       .then((response)=>{
-        Promise.all(response.data.data.map((item)=>{
+        this.getFavorites(response.data.data)
+      })
+    },
+    getFavorites(restaurants){
+      console.log(restaurants)
+      this.restaurantList = []
+      Promise.all(restaurants.map((item)=>{
           return new Promise((resolve)=>{
-            const getReview = new Promise((resolve)=>{
-              axios.get('https://thawing-sea-60162.herokuapp.com/api/evaluationsort/' + item.id)
-              .then((response)=>{
-                if(response.data.data.length>=1){
-                  const reviewList = [];
-                  Promise.all(response.data.data.map((item)=>{
-                    return new Promise((resolve)=>{
-                      reviewList.push(parseInt(item.rating))
-                      resolve()
-                    })
-                  })).then(()=>{
-                    const sum = reviewList.reduce((sum,element)=>{
-                      return sum+element
-                    })
-                    const average = sum/response.data.data.length
-                    resolve(average)
-                  })
-                } else{
-                  const average = 0;
-                  resolve(average)
-                }
-              })
-            })
-            const getLocationName = new Promise((resolve)=>{
-              axios.get('https://thawing-sea-60162.herokuapp.com/api/location/' + item.location_id)
-              .then((response)=>{
-                const location = response.data.data.name
-                resolve(location);
-              })
-            })
-            const getGenreName = new Promise((resolve)=>{
-              axios.get('https://thawing-sea-60162.herokuapp.com/api/genre/' + item.genre_id)
-              .then((response)=>{
-                const genre = response.data.data.name
-                resolve(genre)
-              })
-            })
-            const getFavorite = new Promise((resolve)=>{
+            new Promise((resolve)=>{
               axios.get(`https://thawing-sea-60162.herokuapp.com/api/favorite?user_id=${this.$store.state.user.id}&restaurant_id=${item.id}`)
               .then((response)=>{
                 const favorite = response.data.favorite
                 resolve(favorite)
               })
             })
-            Promise.all([getReview,getLocationName,getGenreName,getFavorite]).then((values)=>{
+            .then((result)=>{
               let restaurant = {
                 id : item.id,
                 name : item.name,
-                rating : values[0],
-                location : values[1],
-                genre : values[2],
-                favorite : values[3],
+                kana_name : item.kana_name,
+                rating : item.rating,
+                location : item.location,
+                genre : item.genre,
+                favorite : result,
                 img : item.img
               }
               this.restaurantList.push(restaurant)
@@ -135,11 +109,10 @@ export default {
             })
           })
         })).then(()=>{
-            this.restaurantList.sort((a,b)=>{
+          this.restaurantList.sort((a,b)=>{
               return a.id-b.id
-            })
           })
-      })
+        })
     },
     async like(restaurantId){
       await axios.post('https://thawing-sea-60162.herokuapp.com/api/favorite',{

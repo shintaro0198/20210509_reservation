@@ -94,10 +94,6 @@ export default {
       this.$emit('getSearchedText',this.text)
     }
   },
-  async created(){
-    this.$emit("getSearchedLocation",this.location),
-    this.$emit("getSearchedGenre",this.genre)
-  }
 }
 </script>
 

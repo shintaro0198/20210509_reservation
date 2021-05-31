@@ -17,7 +17,7 @@
           <v-row>
             <v-col class="mr-3">レストラン</v-col>
             <v-col>
-              <div>{{item.name}}</div>
+              <div>{{item.restaurant_name}}</div>
             </v-col>
           </v-row>
         </v-card-text>
@@ -83,25 +83,11 @@ export default {
       await axios.get('https://thawing-sea-60162.herokuapp.com/api/reservesort/' + this.$store.state.user.id)
       .then((response)=>{
         Promise.all(response.data.data.map((item)=>{
-          const reservationId = item.id
-          const reservationDate = item.date;
-          const reservationTime = item.time;
-          const reservationNumber = item.number;
-          return new Promise((resolve)=>{
-            axios.get('https://thawing-sea-60162.herokuapp.com/api/restaurant/' + item.restaurant_id)
-            .then((response)=>{
-              const reservationName = response.data.data.name
-              const restaurant = {
-                id : reservationId,
-                name : reservationName,
-                date : reservationDate,
-                time : reservationTime,
-                number : reservationNumber,
-                showCancel : false,
-              };
-              this.reservationList.push(restaurant)
-              resolve()
-            })
+          return  new Promise((resolve)=>{
+            this.reservationList.push(item)
+            console.log(parseInt(item.date))
+            console.log(item.date)
+            resolve()
           })
         })).then(()=>{
         this.reservationList.sort((a,b)=>{
@@ -130,7 +116,7 @@ export default {
         this.reservationList = []
         this.getReservation();
       })
-    }
+    },
   },
   async created(){
    this.getReservation();

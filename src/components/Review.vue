@@ -5,10 +5,10 @@
     </v-layout>
     <template>
       <div v-for="item in limitedReviewList" :key="item.id">
-        <div class="font-weight-bold">{{item.userName}}</div>
+        <div class="font-weight-bold">{{item.user_name}}</div>
         <div class="d-flex">
           <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
-          <p class="mb-3">{{item.comment}}</p>
+          <p class="mb-3">{{item.content}}</p>
         </div>
       </div>
       <v-btn @click="showMoreReview=!showMoreReview" class="ml-auto d-block">レビューを全て確認する</v-btn>
@@ -16,10 +16,10 @@
     <template>
       <div v-if="showMoreReview===true">
         <div v-for="item in unlimitedReviewList" :key="item.id">
-          <div class="font-weight-bold">{{item.userName}}</div>
+          <div class="font-weight-bold">{{item.user_name}}</div>
           <div class="d-flex">
             <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
-            <p class="mb-3">{{item.comment}}</p>
+            <p class="mb-3">{{item.content}}</p>
           </div>
         </div>
       </div>
@@ -60,19 +60,9 @@ export default {
         Promise.all(
           response.data.data.map((item)=>{
             return new Promise((resolve)=>{
-              axios.get('https://thawing-sea-60162.herokuapp.com/api/user/' + item.user_id)
-              .then((response)=>{
-                const userName = response.data.data.name
-                resolve(userName)
-              })
-            }).then((result)=>{
-              const data ={
-                id : item.id,
-                userName : result,
-                rating : parseInt(item.rating.toLocaleString()),
-                comment : item.content
-              }
-              this.reviewList.push(data)
+              item.rating = parseInt(item.rating)
+              this.reviewList.push(item)
+              resolve()
             })
           })
         ).then(()=>{

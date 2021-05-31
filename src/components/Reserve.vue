@@ -125,7 +125,8 @@ export default {
           time : this.time,
           number : this.number
         })
-        .then(()=>{
+        .then((response)=>{
+          console.log(response)
           this.$router.push('/reserved')
         })
         }
