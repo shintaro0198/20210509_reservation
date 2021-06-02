@@ -41,7 +41,6 @@ export default {
       .then((response)=>{
        this.restaurant = response.data.data
        this.reviewLength = response.data.data.review.length
-       console.log(this.restaurant)
       })
     },
   },

@@ -69,7 +69,6 @@ export default {
     searchItems : async function(){
       await axios.get(`https://thawing-sea-60162.herokuapp.com/api/search?location=${this.location}&genre=${this.genre}`)
       .then((response)=>{
-        console.log(response)
         this.getFavorites(response.data.data)
       })
     }
@@ -82,7 +81,6 @@ export default {
       })
     },
     getFavorites(restaurants){
-      console.log(restaurants)
       this.restaurantList = []
       Promise.all(restaurants.map((item)=>{
           return new Promise((resolve)=>{

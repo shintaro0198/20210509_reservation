@@ -80,7 +80,7 @@ export default {
   },
   methods:{
     async getReservation(){
-      await axios.get('https://thawing-sea-60162.herokuapp.com/api/reservesort/' + this.$store.state.user.id)
+      await axios.get('https://thawing-sea-60162.herokuapp.com/api/reservationsort/' + this.$store.state.user.id)
       .then((response)=>{
         Promise.all(response.data.data.map((item)=>{
           return  new Promise((resolve)=>{

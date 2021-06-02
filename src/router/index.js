@@ -75,7 +75,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
   const sitePege = ["Register","Login","Thanks","Home","Mypage","Reserved"]
-  if (sitePege.indexOf(to.name) === -1) {
+  if (sitePege.indexOf(from.name) === -1) {
     console.log('alpha')
   }
 })

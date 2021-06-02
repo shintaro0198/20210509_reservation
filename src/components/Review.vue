@@ -17,7 +17,7 @@
       <div v-if="showMoreReview===true">
         <div v-for="item in unlimitedReviewList" :key="item.id">
           <div class="font-weight-bold">{{item.user_name}}</div>
-          <div class="d-flex">
+          <div class="d-block d-xl-flex d-md-flex">
             <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
             <p class="mb-3">{{item.content}}</p>
           </div>
