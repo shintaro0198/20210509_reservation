@@ -5,15 +5,15 @@
     <div v-for="item in reviewList" :key="item.id">
       <div class="font-weight-bold"><span class="mr-3">{{item.user_name}}</span><span>{{item.restaurant_name}}</span></div>
       <v-layout justify-space-between>
-        <div class="d-block d-xl-flex d-md-flex">
-          <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
-          <p class="mb-3">{{item.content}}</p>
-        </div>
         <div>
+          <v-rating v-model="item.rating" small dense half-increments readonly half-icon="mdi-star-half-full"  color="amber darken-1" class="mr-5"></v-rating>
+        </div>
+        <div class="ml-2">
           <v-icon @click="item.showEdit=!item.showEdit" class="mr-3">mdi-pencil</v-icon>
           <v-icon @click="item.showVerification=!item.showVerification">mdi-delete</v-icon>
         </div>
       </v-layout>
+      <p class="mb-3">{{item.content}}</p>
       <div v-if="item.showEdit===true">
         <v-rating v-model="rating" dense half-increments half-icon="mdi-star-half-full"  color="amber darken-1" class="body-2"></v-rating>
         <v-textarea solo dense auto-grow v-model="comment"></v-textarea>

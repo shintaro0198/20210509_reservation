@@ -8,13 +8,13 @@
         <v-col class="gothic-h6 font-weight-bold ml-xl-auto ml-md-auto mx-auto mx-xl-0 mx-md-0 text-center text-xl-left text-md-left" cols="6">{{$store.state.user.name}}</v-col>
       </div>
       <v-row class="mt-5 mb-3">
-        <v-col cols="10" xl="5" md="5" class=" mx-auto">
+        <v-col cols="10" xl="5" md="5" class="mx-auto">
           <Reservation @getEditData="EditData"></Reservation>
         </v-col>
         <v-col v-if="showEdit==true" cols="10" xl="5" md="5" class=" mx-auto">
           <Reserve :reservationId="id" :putMethod="'put'">予約情報を変更する</Reserve>
         </v-col>
-        <v-col cols="10" xl="5"  md="5" class="mx-auto">
+        <v-col cols="10" xl="6"  md="6" class="mx-auto">
           <Favorites></Favorites>
         </v-col>
         <v-col cols="10" xl="5" md="5" class="mx-auto">

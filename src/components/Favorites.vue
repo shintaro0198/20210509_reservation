@@ -4,7 +4,7 @@
     <p v-if="restaurantList.length===0">お気に入り情報はありません</p>
     <v-row class="mx-auto">
       <v-col class="mx-auto" v-for="item in restaurantList" :key="item.id">
-        <v-card width="200px">
+        <v-card width="200px" class="mx-auto mx-xl-0 mx-md-0">
           <v-img :src="item.img"></v-img>
           <v-card-title>{{item.name}}</v-card-title>
           <v-card-text>
